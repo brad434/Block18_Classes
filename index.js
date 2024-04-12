@@ -21,9 +21,11 @@ class ShoppingCart {
     this.products = [];
     this.isLoggedIn = false;
   }
+
   //adding products to cart
   addProduct(product) {
     this.products.push(product);
+    return product;
   }
 
   //check to see if the cart is empty
@@ -42,24 +44,50 @@ class ShoppingCart {
       });
     }
   }
-}
 
-//initiates the checkout process
-checkout() {
-  if(this.isCartEmpty()) {
-    console.log("Your cart is empty. Please add some products before checking out.");
-    return;
-  } 
+  //initiates the checkout process
+  checkout() {
+    if (this.isCartEmpty()) {
+      console.log(
+        "Your cart is empty. Please add some products before checking out."
+      );
+      return;
+    }
 
-  let userAction = prompt("Do you want to checkout as a guest or log in?");
-  if(userAction === "guest"){
-    let guestDecision = prompt('Would you like to create an account for easier checkout next time? (Yes/No)');
-    if(guestDecision === "yes"){
-      console.log("Redirecting to account creation...")
+    let userAction = prompt("Do you want to checkout as a guest or log in?");
+
+    if (userAction === "guest") {
+      let guestDecision = prompt(
+        "Would you like to create an account for easier checkout next time? (Yes/No)"
+      );
+      if (guestDecision === "yes") {
+        console.log("Redirecting to account creation...");
+      } else {
+        console.log("Proceeding as guest...");
+        this.processPayment();
+      }
+    } else if (userAction === "login") {
+      console.log("Redirecting to login...");
+      this.isLoggedIn = true;
+      this.processPayment();
+    } else {
+      console.log("Invalid action. Checkout aborted.");
     }
   }
+
+  processPayment() {
+    console.log("Processing payment...");
+    console.log("Payment Completed. Thank you for your time.");
+  }
+}
 
 console.log(multiplication(3, 2));
 console.log(concatOdds([3, 2, 1], [9, 1, 1, 1, 4, 15, -1]));
 
-module.exports = { multiplication, concatOdds };
+const cart = new ShoppingCart();
+console.log(cart.addProduct({ name: "T-Shirt", price: 20 }));
+console.log(cart.isCartEmpty());
+console.log(cart.showItems());
+// cart.addProduct({ name: "Jeans", price: 40 });
+
+// module.exports = { multiplication, concatOdds };
