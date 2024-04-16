@@ -24,8 +24,15 @@ class ShoppingCart {
 
   //adding products to cart
   addProduct(product) {
-    this.products.push(product);
-    return product;
+    if (
+      typeof product?.name === "string" &&
+      typeof product?.price === "number"
+    ) {
+      this.products.push(product);
+      return product;
+    } else {
+      return "Please add a valid product";
+    }
   }
 
   //check to see if the cart is empty
@@ -36,11 +43,11 @@ class ShoppingCart {
   //display the cart's contents
   showItems() {
     if (this.isCartEmpty()) {
-      console.log("Your cart is empty");
+      return "Your cart is empty";
     } else {
       console.log("Cart Contents:");
       this.products.forEach((product, index) => {
-        console.log(`${index + 1}: ${product.name} - $${product.price}`);
+        return `${index + 1}: ${product.name} - $${product.price}`;
       });
     }
   }
@@ -54,30 +61,33 @@ class ShoppingCart {
       return;
     }
 
-    let userAction = prompt("Do you want to checkout as a guest or log in?");
+    // let userAction = prompt("Do you want to checkout as a guest or log in?");
 
-    if (userAction === "guest") {
-      let guestDecision = prompt(
-        "Would you like to create an account for easier checkout next time? (Yes/No)"
-      );
-      if (guestDecision === "yes") {
-        console.log("Redirecting to account creation...");
-      } else {
-        console.log("Proceeding as guest...");
-        this.processPayment();
-      }
-    } else if (userAction === "login") {
-      console.log("Redirecting to login...");
-      this.isLoggedIn = true;
-      this.processPayment();
-    } else {
-      console.log("Invalid action. Checkout aborted.");
-    }
+    // if (userAction === "guest") {
+    //   let guestDecision = prompt(
+    //     "Would you like to create an account for easier checkout next time? (Yes/No)"
+    //   );
+    //   if (guestDecision === "yes") {
+    //     console.log("Redirecting to account creation...");
+    //   } else {
+    //     console.log("Proceeding as guest...");
+    //     this.processPayment();
+    //   }
+    // } else if (userAction === "login") {
+    //   console.log("Redirecting to login...");
+    //   this.isLoggedIn = true;
+    //   this.processPayment();
+    // } else {
+    //   console.log("Invalid action. Checkout aborted.");
+    // }
   }
 
-  processPayment() {
-    console.log("Processing payment...");
-    console.log("Payment Completed. Thank you for your time.");
+  processPayment(card) {
+    if (card.length !== 12) {
+      return "Invalid card number";
+    } else {
+      return "Successful";
+    }
   }
 }
 
@@ -88,6 +98,7 @@ const cart = new ShoppingCart();
 console.log(cart.addProduct({ name: "T-Shirt", price: 20 }));
 console.log(cart.isCartEmpty());
 console.log(cart.showItems());
+console.log(cart.checkout());
 // cart.addProduct({ name: "Jeans", price: 40 });
 
-// module.exports = { multiplication, concatOdds };
+module.exports = { multiplication, concatOdds, ShoppingCart };
